@@ -1,0 +1,25 @@
+Options -Indexes
+IndexIgnore *
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Removes access to the system folder by users.
+    RewriteCond %{REQUEST_URI} ^system.*
+    RewriteRule ^(.*)$ /index.php?/$1 [L]
+
+    # Prevents user access to the application folder
+    RewriteCond %{REQUEST_URI} ^application.*
+    RewriteRule ^(.*)$ /index.php?/$1 [L]
+
+    #ESTUDAR UMA FORMA DE TORNAR A URL SEM CASE SENSITIVE
+    #RewriteMap tolowercase int:tolower 
+    #RewriteRule ^(.*)$ ${tolowercase:$1}
+
+    # Checks to see if the user is attempting to access a valid file,
+    # such as an image or css document, if this isn't true it sends the
+    # request to index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?/$1 [L]
+</IfModule>
